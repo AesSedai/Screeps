@@ -33,7 +33,7 @@ populate = (spawn) ->
   # Get creeps in room
   creeps = spawn.room.find(FIND_MY_CREEPS)
   # Iterate over population spec, stop once a creep is spawned or if waiting for energy to spawn
-  _.some(population, (c) ->
+  result = _.some(population, (c) ->
     current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
     # if unable to build in order, then wait to spawn
     if current < c.amount
@@ -44,6 +44,13 @@ populate = (spawn) ->
         console.log spawn.room.name, 'Waiting to spawn', c.role
       return true
   )
+  # if not waiting and not spawning anything, make harvesters
+  unless result
+    if spawn.room.energyAvailable >= roles.largeHarvester.cost
+      console.log spawn.room.name, 'Spawning largeHarvester'
+      spawn.createCreep(roles.harvester.build, 'largeHarvester-' + Game.time, {role: 'largeHarvester'})
+    else
+      console.log spawn.room.name, 'Waiting to spawn largeHarvester'
 
 # Run creeps with their roles from memory
 assignRoles = () ->
