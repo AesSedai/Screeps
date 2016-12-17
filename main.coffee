@@ -1,18 +1,55 @@
 _ = require('lodash')
 roles = require('roles')
 
-population =
-  harvester: 4
+population = _.sortBy([
+  {
+    role: 'harvester'
+    amount: 4
+    priority: 1
+  }
+  {
+    role: 'builder'
+    amount: 4
+    priority: 3
+  }
+  {
+    role: 'upgrader'
+    amount: 2
+    priority: 2
+  }
+  {
+    role: 'repairer'
+    amount: 2
+    priority: 4
+  }
+], (o) -> o.priority)
 
-populate = ->
-  _.map(population, (amt, role) ->
-    current = _.filter(Game.creeps, (creep) -> creep.memory.role is role)
-    Game.spawns['Origin'].createCreep(roles[role].build, role+'-'+Game.time, {role: role}) if current < amt
+cleanup = ->
+  _.map(_.filter(Memory.creeps, (name) -> !!Game.creeps[name]), (creep) -> console.log 'Cleaning up', creep; delete Memory.creeps[creep])
+
+populate = (spawn) ->
+  creeps = spawn.room.find(FIND_MY_CREEPS)
+  _.map(population, (c) ->
+    current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
+    if current < c.amount and spawn.room.energyAvailable > roles[c.role].cost
+      console.log 'spawning', c.role
+      spawn.createCreep(roles[c.role].build, c.role+'-'+Game.time, {role: c.role})
   )
 
-assignRoles = ->
+assignRoles = (spawn) ->
   _.map(Game.creeps, (creep) -> roles[creep.memory.role].run(creep))
 
+log = (spawn) ->
+  creeps = spawn.room.find(FIND_MY_CREEPS)
+  _.map(population, (c) ->
+    console.log spawn.room.name, c.role, c.amount, "(#{_.filter(creeps, (creep) -> creep.memory.role is c.role).length})"
+  )
+  console.log()
+
 module.exports.loop = ->
-  populate()
+  cleanup()
   assignRoles()
+  _.map(Game.spawns, (spawn) ->
+    populate(spawn)
+    log(spawn)
+  )

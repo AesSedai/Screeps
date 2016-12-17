@@ -1,3 +1,4 @@
+utils = require('utils')
 roleBuilder =
   run: (creep) ->
     if creep.memory.building and creep.carry.energy is 0
@@ -7,15 +8,14 @@ roleBuilder =
       creep.memory.building = true
       creep.say 'building'
     if creep.memory.building
-      targets = creep.room.find(FIND_CONSTRUCTION_SITES)
-      if targets.length
-        if creep.build(targets[0]) is ERR_NOT_IN_RANGE
-          creep.moveTo targets[0]
+      target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
+      creep.moveTo target if target and creep.build(target) is ERR_NOT_IN_RANGE
     else
-      sources = creep.room.find(FIND_SOURCES)
-      if creep.harvest(sources[0]) is ERR_NOT_IN_RANGE
-        creep.moveTo sources[0]
+      source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
+      creep.moveTo source if creep.harvest(source) is ERR_NOT_IN_RANGE
     return
   build: [WORK, CARRY, MOVE]
+
+roleBuilder.cost = utils.calculateBodyCost(roleBuilder.build)
 
 module.exports = roleBuilder

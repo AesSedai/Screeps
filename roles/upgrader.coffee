@@ -1,3 +1,4 @@
+utils = require('utils')
 roleUpgrader =
   run: (creep) ->
     if creep.memory.upgrading and creep.carry.energy is 0
@@ -7,13 +8,13 @@ roleUpgrader =
       creep.memory.upgrading = true
       creep.say 'upgrading'
     if creep.memory.upgrading
-      if creep.upgradeController(creep.room.controller) is ERR_NOT_IN_RANGE
-        creep.moveTo creep.room.controller
+      creep.moveTo creep.room.controller if creep.upgradeController(creep.room.controller) is ERR_NOT_IN_RANGE
     else
-      sources = creep.room.find(FIND_SOURCES)
-      if creep.harvest(sources[0]) is ERR_NOT_IN_RANGE
-        creep.moveTo sources[0]
+      source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
+      creep.moveTo source if creep.harvest(source) is ERR_NOT_IN_RANGE
     return
   build: [WORK, CARRY, MOVE]
+
+roleUpgrader.cost = utils.calculateBodyCost(roleUpgrader.build)
 
 module.exports = roleUpgrader
