@@ -1,5 +1,6 @@
 _ = require 'lodash'
 roles = require 'roles'
+profiler = require 'screeps-profiler'
 
 population = [
   {
@@ -19,10 +20,17 @@ population = [
   }
   {
     role: 'repairer'
-    amount: 1
+    amount: 2
     priority: 4
   }
+  {
+    role: 'miner'
+    amount: 1
+    priority: 5
+  }
 ]
+
+maxPop = 15
 
 # Remove dead creeps from memory
 cleanup = ->
@@ -32,6 +40,7 @@ cleanup = ->
 populate = (spawn) ->
   # Get creeps in room
   creeps = spawn.room.find(FIND_MY_CREEPS)
+  return if creeps.length >= maxPop
   # Iterate over population spec, stop once a creep is spawned or if waiting for energy to spawn
   result = _.some(population, (c) ->
     current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
@@ -66,10 +75,13 @@ log = (spawn) ->
   console.log()
 
 # Main loop
+profiler.enable()
 module.exports.loop = ->
-  cleanup()
-  assignRoles()
-  _.map(Game.spawns, (spawn) ->
-    populate(spawn)
-    log(spawn)
+  profiler.wrap( ->
+    cleanup()
+    assignRoles()
+    _.map(Game.spawns, (spawn) ->
+      populate(spawn)
+      log(spawn)
+    )
   )

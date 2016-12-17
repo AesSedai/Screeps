@@ -1,5 +1,6 @@
 utils = require 'utils'
 roleUpgrader = require 'upgrader'
+
 roleHarvester =
   run: (creep) ->
     if creep.carry.energy < creep.carryCapacity
