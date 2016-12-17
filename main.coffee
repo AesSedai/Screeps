@@ -3,29 +3,29 @@ roles = require('roles')
 
 population = _.sortBy([
   {
-    role: 'harvester'
-    amount: 4
+    role: 'largeHarvester'
+    amount: 2
     priority: 1
   }
   {
     role: 'builder'
-    amount: 4
+    amount: 2
     priority: 3
   }
   {
     role: 'upgrader'
-    amount: 2
+    amount: 3
     priority: 2
   }
   {
     role: 'repairer'
-    amount: 2
+    amount: 1
     priority: 4
   }
 ], (o) -> o.priority)
 
 cleanup = ->
-  _.map(_.filter(Memory.creeps, (name) -> !!Game.creeps[name]), (creep) -> console.log 'Cleaning up', creep; delete Memory.creeps[creep])
+  _.map(_.filter(Memory.creeps, (creep, name) -> !Game.creeps[name]), (creep, name) -> delete Memory.creeps[name])
 
 populate = (spawn) ->
   creeps = spawn.room.find(FIND_MY_CREEPS)
