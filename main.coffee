@@ -36,12 +36,12 @@ populate = (spawn) ->
   _.some(population, (c) ->
     current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
     # if unable to build in order, then wait to spawn
-    if current < c.amount and spawn.room.energyAvailable >= roles[c.role].cost
-      console.log spawn.room.name, 'Spawning', c.role
-      spawn.createCreep(roles[c.role].build, c.role + '-' + Game.time, {role: c.role})
-      return true
-    else
-      console.log spawn.room.name, 'Waiting to spawn', c.role
+    if current < c.amount
+      if spawn.room.energyAvailable >= roles[c.role].cost
+        console.log spawn.room.name, 'Spawning', c.role
+        spawn.createCreep(roles[c.role].build, c.role + '-' + Game.time, {role: c.role})
+      else
+        console.log spawn.room.name, 'Waiting to spawn', c.role
       return true
   )
 
