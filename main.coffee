@@ -1,5 +1,5 @@
-_ = require('lodash')
-roles = require('roles')
+_ = require 'lodash'
+roles = require 'roles'
 
 population = _.sortBy([
   {
@@ -25,7 +25,7 @@ population = _.sortBy([
 ], (o) -> o.priority)
 
 cleanup = ->
-  _.map(_.filter(Memory.creeps, (creep, name) -> !Game.creeps[name]), (creep, name) -> delete Memory.creeps[name])
+  _.map(Memory.creeps, (creep, name) -> delete Memory.creeps[name] if !Game.creeps[name])
 
 populate = (spawn) ->
   creeps = spawn.room.find(FIND_MY_CREEPS)
@@ -36,7 +36,7 @@ populate = (spawn) ->
       spawn.createCreep(roles[c.role].build, c.role+'-'+Game.time, {role: c.role})
   )
 
-assignRoles = (spawn) ->
+assignRoles = () ->
   _.map(Game.creeps, (creep) -> roles[creep.memory.role].run(creep))
 
 log = (spawn) ->
