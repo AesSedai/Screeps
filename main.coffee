@@ -1,16 +1,11 @@
 _ = require 'lodash'
 roles = require 'roles'
 
-population = _.sortBy([
+population = [
   {
     role: 'largeHarvester'
-    amount: 2
+    amount: 6
     priority: 1
-  }
-  {
-    role: 'builder'
-    amount: 2
-    priority: 3
   }
   {
     role: 'upgrader'
@@ -18,34 +13,52 @@ population = _.sortBy([
     priority: 2
   }
   {
+    role: 'builder'
+    amount: 2
+    priority: 3
+  }
+  {
     role: 'repairer'
     amount: 1
     priority: 4
   }
-], (o) -> o.priority)
+]
 
+# Remove dead creeps from memory
 cleanup = ->
   _.map(Memory.creeps, (creep, name) -> delete Memory.creeps[name] if !Game.creeps[name])
 
+# Spawn creeps for a spawner based on population variable
 populate = (spawn) ->
+  # Get creeps in room
   creeps = spawn.room.find(FIND_MY_CREEPS)
-  _.map(population, (c) ->
+  # Iterate over population spec, stop once a creep is spawned or if waiting for energy to spawn
+  _.some(population, (c) ->
     current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
-    if current < c.amount and spawn.room.energyAvailable > roles[c.role].cost
-      console.log 'spawning', c.role
-      spawn.createCreep(roles[c.role].build, c.role+'-'+Game.time, {role: c.role})
+    # if unable to build in order, then wait to spawn
+    if current < c.amount and spawn.room.energyAvailable >= roles[c.role].cost
+      console.log spawn.room.name, 'Spawning', c.role
+      spawn.createCreep(roles[c.role].build, c.role + '-' + Game.time, {role: c.role})
+      return true
+    else
+      console.log spawn.room.name, 'Waiting to spawn', c.role
+      return true
   )
 
+# Run creeps with their roles from memory
 assignRoles = () ->
   _.map(Game.creeps, (creep) -> roles[creep.memory.role].run(creep))
 
+# Print out information for each spawn
 log = (spawn) ->
   creeps = spawn.room.find(FIND_MY_CREEPS)
+  console.log spawn.room.name, 'Energy available', spawn.room.energyAvailable
   _.map(population, (c) ->
     console.log spawn.room.name, c.role, c.amount, "(#{_.filter(creeps, (creep) -> creep.memory.role is c.role).length})"
   )
   console.log()
 
+# Main loop
 module.exports.loop = ->
   cleanup()
   assignRoles()

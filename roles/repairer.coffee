@@ -1,5 +1,5 @@
-utils = require('utils')
-roleBuilder = require('builder')
+utils = require 'utils'
+roleBuilder = require 'builder'
 roleRepairer =
   run: (creep) ->
     if creep.memory.working and creep.carry.energy is 0

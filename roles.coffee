@@ -1,8 +1,8 @@
-harvester = require('harvester')
-builder = require('builder')
-upgrader = require('upgrader')
-repairer = require('repairer')
-largeHarvester = require('largeHarvester')
+harvester = require 'harvester'
+builder = require 'builder'
+upgrader = require 'upgrader'
+repairer = require 'repairer'
+largeHarvester = require 'largeHarvester'
 
 module.exports =
   harvester: harvester

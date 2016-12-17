@@ -1,4 +1,4 @@
-utils = require('utils')
+utils = require 'utils'
 roleUpgrader =
   run: (creep) ->
     if creep.memory.upgrading and creep.carry.energy is 0
@@ -13,7 +13,7 @@ roleUpgrader =
       source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
       creep.moveTo source if creep.harvest(source) is ERR_NOT_IN_RANGE
     return
-  build: [WORK, CARRY, MOVE]
+  build: [WORK, CARRY, MOVE, MOVE]
 
 roleUpgrader.cost = utils.calculateBodyCost(roleUpgrader.build)
 

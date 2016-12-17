@@ -1,5 +1,5 @@
-utils = require('utils')
-roleHarvester = require('harvester')
+utils = require 'utils'
+roleHarvester = require 'harvester'
 roleLargeHarvester =
   run: (creep) ->
     roleHarvester.run(creep)

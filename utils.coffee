@@ -1,4 +1,4 @@
-_ = require('lodash')
+_ = require 'lodash'
 parts =
   MOVE: 50
   WORK: 100

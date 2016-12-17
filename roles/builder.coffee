@@ -1,4 +1,5 @@
-utils = require('utils')
+utils = require 'utils'
+roleUpgrader = require 'upgrader'
 roleBuilder =
   run: (creep) ->
     if creep.memory.building and creep.carry.energy is 0
@@ -9,7 +10,10 @@ roleBuilder =
       creep.say 'building'
     if creep.memory.building
       target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
-      creep.moveTo target if target and creep.build(target) is ERR_NOT_IN_RANGE
+      if target
+        creep.moveTo target if target and creep.build(target) is ERR_NOT_IN_RANGE
+      else
+        roleUpgrader.run creep
     else
       source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
       creep.moveTo source if creep.harvest(source) is ERR_NOT_IN_RANGE
