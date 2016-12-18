@@ -2,15 +2,21 @@ utils = require 'utils'
 _ = require 'lodash'
 
 setContainer = (creep) ->
-  return if creep.memory.container
-  unclaimedSources = _.filter(creep.room.find(FIND_SOURCES), (s) -> _.every(Memory.creeps, (c) -> _.isUndefined(c?.memory?.source) or c?.memory?.source is not s.id))
-  _.map(creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_CONTAINER), (c) ->
+  # return if creep.memory.container
+  unclaimedSources = _.filter(creep.room.find(FIND_SOURCES), (s) -> _.every(_.filter(Memory.creeps, (c) -> c.role is 'miner' and not _.isUndefined(c?.source)), (c) -> c?.source != s.id))
+  claimed = _.some(creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_CONTAINER), (c) ->
+    return true if creep?.memory?.source
     nearSource = _.find(unclaimedSources, (s) -> c.pos.isNearTo(s))
-    creep.memory.source = nearSource.id if nearSource
-    creep.memory.container = c.id
-    return
+    if nearSource
+      creep.memory.source = nearSource.id
+      creep.memory.container = c.id
+      return true
+    return false
   )
-  console.log 'No container for miner', creep, 'for source', creep.memory.source
+  if claimed
+    console.log 'Claimed source', creep.memory.source, 'for miner', creep
+  else
+    console.log 'No container for miner', creep, 'for source', creep.memory.source
 
 roleMiner =
   run: (creep) ->
