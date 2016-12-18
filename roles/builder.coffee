@@ -18,6 +18,7 @@ roleBuilder =
     else
       utils.getEnergy(creep)
   build: [WORK, CARRY, MOVE]
+  ratio: {WORK: 1, MOVE: 1, CARRY: 1}
 
 roleBuilder.cost = utils.calculateBodyCost(roleBuilder.build)
 

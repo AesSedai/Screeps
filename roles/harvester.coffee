@@ -15,6 +15,7 @@ roleHarvester =
       else
         roleUpgrader.run creep
   build: [WORK, CARRY, MOVE]
+  ratio: {WORK: 1, MOVE: 1, CARRY: 1}
 
 roleHarvester.cost = utils.calculateBodyCost(roleHarvester.build)
 

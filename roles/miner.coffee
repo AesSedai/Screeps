@@ -25,6 +25,7 @@ roleMiner =
     # move onto a container next to a source
     creep.moveTo creep.memory.source if creep.harvest(creep.memory.source) is ERR_NOT_IN_RANGE
   build: [WORK, MOVE]
+  ratio: {WORK: 5, MOVE: 1}
 
 roleMiner.cost = utils.calculateBodyCost(roleMiner.build)
 
