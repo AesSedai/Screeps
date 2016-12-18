@@ -1,12 +1,12 @@
 utils = require 'utils'
-_ = require 'lodash'
+_ = require 'lodash.min'
 
 setContainer = (creep) ->
-  # return if creep.memory.container
+  return if creep.memory?.container
   unclaimedSources = _.filter(creep.room.find(FIND_SOURCES), (s) -> _.every(_.filter(Memory.creeps, (c) -> c.role is 'miner' and not _.isUndefined(c?.source)), (c) -> c?.source != s.id))
   claimed = _.some(creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_CONTAINER), (c) ->
     return true if creep?.memory?.source
-    nearSource = _.find(unclaimedSources, c.pos.isNearTo)
+    nearSource = _.find(unclaimedSources, (s) -> c.pos.isNearTo(s))
     if nearSource
       creep.memory.source = nearSource.id
       creep.memory.container = c.id

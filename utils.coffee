@@ -1,9 +1,8 @@
-_ = require 'lodash'
+_ = require 'lodash.min'
 
 # Uses parts variable to calculate body cost from body array
 calculateBodyCost = (body) ->
-  # _.sumBy(body, (part) -> BODYPART_COST[part.toLowerCase()])
-  _.reduce(body, ((sum, n) -> sum += BODYPART_COST[n.toLowerCase()]), 0)
+  _.sumBy(body, (part) -> BODYPART_COST[part.toLowerCase()])
 
 getEnergy = (creep) ->
   # check for energy available on the ground

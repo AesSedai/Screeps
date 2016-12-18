@@ -1,4 +1,4 @@
-_ = require 'lodash'
+_ = require 'lodash.min'
 roles = require 'roles'
 utils = require 'utils'
 profiler = require 'screeps-profiler'
