@@ -6,7 +6,7 @@ setContainer = (creep) ->
   unclaimedSources = _.filter(creep.room.find(FIND_SOURCES), (s) -> _.every(_.filter(Memory.creeps, (c) -> c.role is 'miner' and not _.isUndefined(c?.source)), (c) -> c?.source != s.id))
   claimed = _.some(creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_CONTAINER), (c) ->
     return true if creep?.memory?.source
-    nearSource = _.find(unclaimedSources, (s) -> c.pos.isNearTo(s))
+    nearSource = _.find(unclaimedSources, c.pos.isNearTo)
     if nearSource
       creep.memory.source = nearSource.id
       creep.memory.container = c.id
@@ -24,7 +24,8 @@ module.exports =
     setContainer(creep) unless creep.memory?.container
     return unless creep.memory?.source and creep.memory?.container
     # move onto a container next to a source
-    return creep.moveTo Game.getObjectById(creep.memory.container) if not creep.pos.isEqualTo(Game.getObjectById(creep.memory.container))
+    container = Game.getObjectById(creep.memory.container)
+    return creep.moveTo container if not creep.pos.isEqualTo(container)
     creep.harvest(Game.getObjectById(creep.memory.source))
   build: [WORK, MOVE]
   ratio: {WORK: 5, MOVE: 1}

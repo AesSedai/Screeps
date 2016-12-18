@@ -64,7 +64,7 @@ populate = (spawn) ->
 
   # Iterate over population spec, stop once a creep is spawned or if waiting for energy to spawn
   result = _.some(population, (c) ->
-    current = _.filter(creeps, (creep) -> creep.memory.role is c.role).length
+    current = _.filter(creeps, memory: role: c.role).length
     return false if current >= c.amount
     spawnCreep(spawn, spawn.room.energyCapacityAvailable, spawn.room.energyAvailable, c.role)
     return true
@@ -79,7 +79,7 @@ assignRoles = () ->
 # Print out information for each spawn
 log = (spawn) ->
   console.log spawn.room.name, 'Energy available', spawn.room.energyAvailable, 'population', spawn.room.find(FIND_MY_CREEPS).length, "(#{maxPop})"
-  console.log(_.map(population, (c) -> "#{c.role} #{c.amount} (#{_.filter(spawn.room.find(FIND_MY_CREEPS), (creep) -> creep.memory.role is c.role).length})").join(" | "))
+  console.log(_.map(population, (c) -> "#{c.role} #{c.amount} (#{_.filter(spawn.room.find(FIND_MY_CREEPS), memory: role: c.role).length})").join(" | "))
   console.log()
 
 # Main loop
