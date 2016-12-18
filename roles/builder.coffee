@@ -1,25 +1,20 @@
 utils = require 'utils'
 roleUpgrader = require 'upgrader'
 
-roleBuilder =
+module.exports =
   run: (creep) ->
-    if creep.memory.building and creep.carry.energy is 0
-      creep.memory.building = false
+    creep.memory.working = false if _.isUndefined(creep.memory?.working)
+    if creep.memory.working and creep.carry.energy is 0
+      creep.memory.working = false
       creep.say 'harvesting'
-    if !creep.memory.building and creep.carry.energy is creep.carryCapacity
-      creep.memory.building = true
+    if !creep.memory.working and creep.carry.energy is creep.carryCapacity
+      creep.memory.working = true
       creep.say 'building'
-    if creep.memory.building
+    if creep.memory.working
       target = creep.pos.findClosestByPath(FIND_CONSTRUCTION_SITES)
-      if target
-        creep.moveTo target if target and creep.build(target) is ERR_NOT_IN_RANGE
-      else
-        roleUpgrader.run creep
+      return creep.moveTo target if target and creep.build(target) is ERR_NOT_IN_RANGE
+      roleUpgrader.run creep
     else
       utils.getEnergy(creep)
   build: [WORK, CARRY, MOVE]
   ratio: {WORK: 1, MOVE: 1, CARRY: 1}
-
-roleBuilder.cost = utils.calculateBodyCost(roleBuilder.build)
-
-module.exports = roleBuilder

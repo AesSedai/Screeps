@@ -18,17 +18,13 @@ setContainer = (creep) ->
   else
     console.log 'No container for miner', creep, 'for source', creep.memory.source
 
-roleMiner =
+module.exports =
   run: (creep) ->
     # find unmined resource and camp it out
-    setContainer(creep) unless creep.memory.container
-    return unless creep.memory.source and creep.memory.container
+    setContainer(creep) unless creep.memory?.container
+    return unless creep.memory?.source and creep.memory?.container
     # move onto a container next to a source
     return creep.moveTo Game.getObjectById(creep.memory.container) if not creep.pos.isEqualTo(Game.getObjectById(creep.memory.container))
     creep.harvest(Game.getObjectById(creep.memory.source))
   build: [WORK, MOVE]
   ratio: {WORK: 5, MOVE: 1}
-
-roleMiner.cost = utils.calculateBodyCost(roleMiner.build)
-
-module.exports = roleMiner

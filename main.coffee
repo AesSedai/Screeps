@@ -16,6 +16,11 @@ population = [
     priority: 2
   }
   {
+    role: 'miner'
+    amount: 2
+    priority: 5
+  }
+  {
     role: 'builder'
     amount: 2
     priority: 3
@@ -26,13 +31,13 @@ population = [
     priority: 4
   }
   {
-    role: 'miner'
+    role: 'wallRepairer'
     amount: 2
-    priority: 5
+    priority: 4
   }
 ]
 
-maxPop = 15
+maxPop = 20
 
 # Remove dead creeps from memory
 cleanup = ->
