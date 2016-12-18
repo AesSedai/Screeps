@@ -24,7 +24,8 @@ roleMiner =
     setContainer(creep) unless creep.memory.container
     return unless creep.memory.source and creep.memory.container
     # move onto a container next to a source
-    creep.moveTo Game.getObjectById(creep.memory.container) if creep.harvest(Game.getObjectById(creep.memory.source)) is ERR_NOT_IN_RANGE
+    return creep.moveTo Game.getObjectById(creep.memory.container) if not creep.pos.isEqualTo(Game.getObjectById(creep.memory.container))
+    creep.harvest(Game.getObjectById(creep.memory.source))
   build: [WORK, MOVE]
   ratio: {WORK: 5, MOVE: 1}
 
