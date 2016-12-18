@@ -53,6 +53,13 @@ spawnCreep = (spawn, energyToUse, currentEnergy, role) ->
   else
     console.log spawn.room.name, 'Waiting to spawn', role, 'need', cost, 'energy', "(#{cost - currentEnergy} more required)"
 
+handleTowers = (spawn) ->
+  towers = spawn.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_TOWER)
+  # blap if possible
+  for tower in towers
+    target = tower.pos.findCLosestByRange(FIND_HOSTILE_CREEPS)
+    tower.attack(target) if target
+
 # Spawn creeps for a spawner based on population variable
 populate = (spawn) ->
   # Get creeps in room
@@ -89,6 +96,7 @@ module.exports.loop = ->
     cleanup()
     assignRoles()
     _.map(Game.spawns, (spawn) ->
+      handleTowers(spawn)
       populate(spawn)
       log(spawn)
     )

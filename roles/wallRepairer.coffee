@@ -1,5 +1,6 @@
 roleBuilder = require 'builder'
 utils = require 'utils'
+_ = require 'lodash.min'
 
 module.exports =
   run: (creep) ->
