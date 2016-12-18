@@ -6,12 +6,13 @@ profiler = require 'screeps-profiler'
 population = [
   {
     role: 'harvester'
-    amount: 6
+    amount: 3
     priority: 1
   }
   {
     role: 'upgrader'
-    amount: 3
+    amt: 2
+    amount: 2
     priority: 2
   }
   {
@@ -71,7 +72,7 @@ assignRoles = () ->
 
 # Print out information for each spawn
 log = (spawn) ->
-  console.log spawn.room.name, 'Energy available', spawn.room.energyAvailable
+  console.log spawn.room.name, 'Energy available', spawn.room.energyAvailable, 'population', spawn.room.find(FIND_MY_CREEPS).length, "(#{maxPop})"
   console.log(_.map(population, (c) -> "#{c.role} #{c.amount} (#{_.filter(spawn.room.find(FIND_MY_CREEPS), (creep) -> creep.memory.role is c.role).length})").join(" | "))
   console.log()
 
