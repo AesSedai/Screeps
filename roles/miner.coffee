@@ -10,7 +10,7 @@ setContainer = (creep) ->
     creep.memory.container = c.id
     return
   )
-  console.log 'No container for miner', creep, 'for source', creep.memory.source.id
+  console.log 'No container for miner', creep, 'for source', creep.memory.source
 
 roleMiner =
   run: (creep) ->

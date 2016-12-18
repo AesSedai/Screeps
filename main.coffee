@@ -27,7 +27,7 @@ population = [
   }
   {
     role: 'miner'
-    amount: 1
+    amount: 2
     priority: 5
   }
 ]
@@ -39,6 +39,7 @@ cleanup = ->
   _.map(Memory.creeps, (creep, name) -> delete Memory.creeps[name] if !Game.creeps[name])
 
 spawnCreep = (spawn, energyToUse, currentEnergy, role) ->
+  return if spawn.spawning
   body = utils.generateBody(energyToUse, roles[role].ratio)
   cost = utils.calculateBodyCost(body)
   if currentEnergy >= cost
