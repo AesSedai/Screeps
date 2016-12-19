@@ -10,6 +10,11 @@ population = [
     priority: 1
   }
   {
+    role: 'wallRepairer'
+    amount: 2
+    priority: 4
+  }
+  {
     role: 'upgrader'
     amt: 2
     amount: 2
@@ -21,19 +26,14 @@ population = [
     priority: 5
   }
   {
-    role: 'builder'
-    amount: 2
-    priority: 3
-  }
-  {
     role: 'repairer'
     amount: 2
     priority: 4
   }
   {
-    role: 'wallRepairer'
+    role: 'builder'
     amount: 2
-    priority: 4
+    priority: 3
   }
 ]
 
@@ -45,7 +45,7 @@ cleanup = ->
 
 spawnCreep = (spawn, energyToUse, currentEnergy, role) ->
   return if spawn.spawning
-  body = utils.generateBody(energyToUse, roles[role].ratio)
+  body = utils.generateBody(energyToUse, roles[role].ratio, roles[role]?.scale)
   cost = utils.calculateBodyCost(body)
   if currentEnergy >= cost
     console.log spawn.room.name, 'Spawning', role
@@ -57,8 +57,14 @@ handleTowers = (spawn) ->
   towers = spawn.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_TOWER)
   # blap if possible
   for tower in towers
-    target = tower.pos.findCLosestByRange(FIND_HOSTILE_CREEPS)
-    tower.attack(target) if target
+    target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
+    if target
+      tower.attack(target)
+      continue
+    target = tower.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
+      s.hits < s.hitsMax and s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_RAMPART
+    )
+    tower.repair(target) if target
 
 # Spawn creeps for a spawner based on population variable
 populate = (spawn) ->
@@ -67,7 +73,7 @@ populate = (spawn) ->
   return if creeps.length >= maxPop
 
   # ensure harvesters are being made at least
-  return spawnCreep(spawn, spawn.room.energyAvailable, spawn.room.energyAvailable, 'harvester') if creeps.length is 0
+  return spawnCreep(spawn, spawn.room.energyAvailable, spawn.room.energyAvailable, 'harvester') unless _.find(creeps, memory: role: 'harvester')
 
   # Iterate over population spec, stop once a creep is spawned or if waiting for energy to spawn
   result = _.some(population, (c) ->
@@ -80,7 +86,7 @@ populate = (spawn) ->
   spawnCreep(spawn, spawn.room.energyCapacityAvailable, spawn.room.energyAvailable, 'harvester') unless result
 
 # Run creeps with their roles from memory
-assignRoles = () ->
+assignRoles = ->
   _.map(Game.creeps, (creep) -> roles[creep.memory.role].run(creep))
 
 # Print out information for each spawn
@@ -98,6 +104,6 @@ module.exports.loop = ->
     _.map(Game.spawns, (spawn) ->
       handleTowers(spawn)
       populate(spawn)
-      log(spawn)
+      log(spawn) unless Game.time % 20
     )
   )

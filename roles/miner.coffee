@@ -29,3 +29,4 @@ module.exports =
     creep.harvest(Game.getObjectById(creep.memory.source))
   build: [WORK, MOVE]
   ratio: {WORK: 5, MOVE: 1}
+  scale: 1

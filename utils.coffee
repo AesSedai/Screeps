@@ -19,9 +19,9 @@ getEnergy = (creep) ->
 getBodyFromParts = (parts) ->
   _.flatten(_.map(parts, (val, key) -> _.fill(Array(val), key.toLowerCase())))
 
-generateBody = (energy, partsRatio) ->
+generateBody = (energy, partsRatio, scale = undefined) ->
   unitCost = calculateBodyCost(getBodyFromParts(partsRatio))
-  scale = _.floor(energy / unitCost)
+  scale ?= _.floor(energy / unitCost)
   getBodyFromParts(_.zipObject(_.keys(partsRatio), _.map(partsRatio, (val) -> val * scale)))
 
 module.exports =
