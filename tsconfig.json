@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "removeComments": true,
+    "noResolve": false,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "sourceMap": true
+  },
+  "compileOnSave": false,
+  "files": [
+    "./node_modules/@types/lodash/index.d.ts",
+    "typings/index.d.ts",
+    "src/index.d.ts"
+  ],
+  "includes": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules",
+    "libs"
+  ]
+}
