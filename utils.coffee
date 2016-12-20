@@ -15,6 +15,18 @@ getEnergy = (creep) ->
   source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
   return creep.moveTo source if source and creep.harvest(source) is ERR_NOT_IN_RANGE
 
+# Makes a creep dump any resources that aren't energy into a container
+dropOffResources = (creep) ->
+  return false unless _.omit(creep.carry, RESOURCE_ENERGY).length
+  # container present?
+  container = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
+    s.structureType == STRUCTURE_CONTAINER and _.sum(_.values(s.store)) < s.storeCapacity
+  )
+  return false unless container
+  resource = _.head(_.keys(_.omit(creep.carry, RESOURCE_ENERGY)))
+  creep.moveTo container if creep.transfer(container, resource) is ERR_NOT_IN_RANGE
+  return true
+
 # Transforms a parts object with {part: amount} keys into a body array
 getBodyFromParts = (parts) ->
   _.flatten(_.map(parts, (val, key) -> _.fill(Array(val), key.toLowerCase())))
@@ -28,3 +40,4 @@ module.exports =
   calculateBodyCost: calculateBodyCost
   getEnergy: getEnergy
   generateBody: generateBody
+  dropOffResources: dropOffResources

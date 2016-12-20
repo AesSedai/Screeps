@@ -1,14 +1,13 @@
-roleBuilder = require 'builder'
-utils = require 'utils'
 _ = require 'lodash.min'
+utils = require 'utils'
+roleBuilder = require 'builder'
 
 module.exports =
   run: (creep) ->
     creep.memory.working = false if _.isUndefined(creep.memory?.working)
-    if creep.memory.working and creep.carry.energy is 0
-      creep.memory.working = false
-    else if !creep.memory.working and creep.carry.energy is creep.carryCapacity
-      creep.memory.working = true
+    creep.memory.working = false if creep.memory.working and creep.carry.energy is 0
+    creep.memory.working = true if not creep.memory.working and _.sum(_.values(creep.carry)) is creep.carryCapacity
+    return if utils.dropOffResources(creep)
     if creep.memory.working
       # find all walls in the room
       ramparts = creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_RAMPART)

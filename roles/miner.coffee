@@ -1,5 +1,5 @@
-utils = require 'utils'
 _ = require 'lodash.min'
+utils = require 'utils'
 
 setContainer = (creep) ->
   return if creep.memory?.container
@@ -20,6 +20,7 @@ setContainer = (creep) ->
 
 module.exports =
   run: (creep) ->
+    return if utils.dropOffResources(creep)
     # find unmined resource and camp it out
     setContainer(creep) unless creep.memory?.container
     return unless creep.memory?.source and creep.memory?.container

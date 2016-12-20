@@ -4,6 +4,7 @@ upgrader = require 'upgrader'
 repairer = require 'repairer'
 miner = require 'miner'
 wallRepairer = require 'wallRepairer'
+longDistanceHarvester = require 'longDistanceHarvester'
 
 module.exports =
   harvester: harvester
@@ -12,3 +13,4 @@ module.exports =
   repairer: repairer
   miner: miner
   wallRepairer: wallRepairer
+  longDistanceHarvester: longDistanceHarvester

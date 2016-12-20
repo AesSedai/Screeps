@@ -10,13 +10,12 @@ population = [
     priority: 1
   }
   {
-    role: 'wallRepairer'
-    amount: 2
-    priority: 4
+    role: 'longDistanceHarvester'
+    amount: 1
+    priority: 3
   }
   {
     role: 'upgrader'
-    amt: 2
     amount: 2
     priority: 2
   }
@@ -34,6 +33,11 @@ population = [
     role: 'builder'
     amount: 2
     priority: 3
+  }
+  {
+    role: 'wallRepairer'
+    amount: 2
+    priority: 4
   }
 ]
 
@@ -69,7 +73,7 @@ handleTowers = (spawn) ->
 # Spawn creeps for a spawner based on population variable
 populate = (spawn) ->
   # Get creeps in room
-  creeps = spawn.room.find(FIND_MY_CREEPS)
+  creeps = _.values(Game.creeps) # spawn.room.find(FIND_MY_CREEPS)
   return if creeps.length >= maxPop
 
   # ensure harvesters are being made at least
@@ -92,7 +96,7 @@ assignRoles = ->
 # Print out information for each spawn
 log = (spawn) ->
   console.log spawn.room.name, 'Energy available', spawn.room.energyAvailable, 'population', spawn.room.find(FIND_MY_CREEPS).length, "(#{maxPop})"
-  console.log(_.map(population, (c) -> "#{c.role} #{c.amount} (#{_.filter(spawn.room.find(FIND_MY_CREEPS), memory: role: c.role).length})").join(" | "))
+  console.log(_.map(population, (c) -> "#{c.role} #{c.amount} (#{_.filter(_.values(Game.creeps), memory: role: c.role).length})").join(" | "))
   console.log()
 
 # Main loop
