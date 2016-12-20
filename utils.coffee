@@ -5,9 +5,11 @@ calculateBodyCost = (body) ->
   _.sumBy(body, (part) -> BODYPART_COST[part.toLowerCase()])
 
 getEnergy = (creep) ->
-  # check for energy available on the ground
-  energy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY)
-  return creep.moveTo energy if energy and creep.pickup(energy) is ERR_NOT_IN_RANGE
+  # check for energy available on the ground if no enemies present
+  enemies = creep.room.find(FIND_HOSTILE_CREEPS)
+  unless enemies.length
+    energy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY)
+    return creep.moveTo energy if energy and creep.pickup(energy) is ERR_NOT_IN_RANGE
   # check for energy available from containers
   container = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) -> s.structureType is STRUCTURE_CONTAINER and s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
   return creep.moveTo container if container and creep.withdraw(container, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE

@@ -59,10 +59,11 @@ spawnCreep = (spawn, energyToUse, currentEnergy, role) ->
 
 handleTowers = (spawn) ->
   towers = spawn.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_TOWER)
-  # blap if possible
+  healer = _.some(spawn.room.find(FIND_HOSTILE_CREEPS), (c) -> _.includes(_.map(c.body, 'type'), HEAL))
+  # blap if no healer
   for tower in towers
     target = tower.pos.findClosestByRange(FIND_HOSTILE_CREEPS)
-    if target
+    if target and not healer
       tower.attack(target)
       continue
     target = tower.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
