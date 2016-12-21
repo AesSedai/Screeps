@@ -9,13 +9,22 @@ getEnergy = (creep) ->
   enemies = creep.room.find(FIND_HOSTILE_CREEPS)
   unless enemies.length
     energy = creep.pos.findClosestByPath(FIND_DROPPED_ENERGY)
-    return creep.moveTo energy if energy and creep.pickup(energy) is ERR_NOT_IN_RANGE
+    if energy
+      pickupResult = creep.pickup(energy)
+      return if pickupResult is OK
+      return creep.moveTo energy if pickupResult is ERR_NOT_IN_RANGE
   # check for energy available from containers
-  container = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) -> s.structureType is STRUCTURE_CONTAINER and s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
-  return creep.moveTo container if container and creep.withdraw(container, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE
+  container = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) -> (s.structureType is STRUCTURE_CONTAINER or s.structureType is STRUCTURE_STORAGE) and s.store[RESOURCE_ENERGY] >= creep.carryCapacity)
+  if container
+    withdrawResult = creep.withdraw(container, RESOURCE_ENERGY)
+    return if withdrawResult is OK
+    return creep.moveTo container if withdrawResult is ERR_NOT_IN_RANGE
   # else harvest
   source = creep.pos.findClosestByPath(FIND_SOURCES_ACTIVE)
-  return creep.moveTo source if source and creep.harvest(source) is ERR_NOT_IN_RANGE
+  if source
+    harvestResult = creep.harvest(source)
+    return if harvestResult is OK
+    return creep.moveTo source if harvestResult is ERR_NOT_IN_RANGE
 
 # Makes a creep dump any resources that aren't energy into a container
 dropOffResources = (creep) ->

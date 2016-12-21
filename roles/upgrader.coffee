@@ -14,5 +14,5 @@ module.exports =
   options: {
     ratio: {WORK: 1, CARRY: 1, MOVE: 1}
     scale:
-      max: 3
+      max: 5
   }
