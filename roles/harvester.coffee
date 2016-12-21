@@ -12,13 +12,19 @@ module.exports =
       target = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (structure) ->
         structure.structureType is STRUCTURE_TOWER and structure.energy < structure.energyCapacity
       )
-      return creep.moveTo target if target and creep.transfer(target, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE
+      if target
+        transferResult = creep.transfer(target, RESOURCE_ENERGY)
+        return if transferResult is OK
+        return creep.moveTo target if transferResult is ERR_NOT_IN_RANGE
       target = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (structure) ->
         (structure.structureType is STRUCTURE_EXTENSION or structure.structureType is STRUCTURE_SPAWN) and structure.energy < structure.energyCapacity
       )
-      return creep.moveTo target if target and creep.transfer(target, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE
+      if target
+        transferResult = creep.transfer(target, RESOURCE_ENERGY)
+        return if transferResult is OK
+        return creep.moveTo target if transferResult is ERR_NOT_IN_RANGE
       roleUpgrader.run creep
     else
       utils.getEnergy(creep)
   build: [WORK, CARRY, MOVE]
-  ratio: {WORK: 1, MOVE: 1, CARRY: 1}
+  ratio: {WORK: 1, CARRY: 1, MOVE: 1}

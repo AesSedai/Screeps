@@ -13,9 +13,12 @@ module.exports =
       target = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
         s.hits < s.hitsMax and s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_RAMPART
       )
-      return creep.moveTo target if target and creep.repair(target) is ERR_NOT_IN_RANGE
+      if target
+        repairStatus = creep.repair(target)
+        return if repairStatus is OK
+        return creep.moveTo(target) if repairStatus is ERR_NOT_IN_RANGE
       roleBuilder.run creep
     else
       utils.getEnergy(creep)
   build: [WORK, CARRY, MOVE]
-  ratio: {WORK: 1, MOVE: 1, CARRY: 1}
+  ratio: {WORK: 1, CARRY: 1, MOVE: 1}

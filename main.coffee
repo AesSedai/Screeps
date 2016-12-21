@@ -66,10 +66,10 @@ handleTowers = (spawn) ->
     if target and not healer
       tower.attack(target)
       continue
-    target = tower.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
-      s.hits < s.hitsMax and s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_RAMPART
-    )
-    tower.repair(target) if target
+    # target = tower.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
+    #  s.hits < s.hitsMax and s.structureType != STRUCTURE_WALL and s.structureType != STRUCTURE_RAMPART
+    # )
+    # tower.repair(target) if target
 
 # Spawn creeps for a spawner based on population variable
 populate = (spawn) ->

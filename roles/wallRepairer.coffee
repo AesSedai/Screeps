@@ -19,7 +19,10 @@ module.exports =
         target = _.find(ramparts, (r) -> (r.hits / r.hitsMax) < percentage )
         break if target
         percentage = percentage + 0.0001
-      return creep.moveTo target if target and creep.repair(target) is ERR_NOT_IN_RANGE
+      if target
+        repairStatus = creep.repair(target)
+        return if repairStatus is OK
+        return creep.moveTo(target) if repairStatus is ERR_NOT_IN_RANGE
       # loop with increasing percentages
       walls = creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_WALL)
       percentage = 0.0001
@@ -28,8 +31,11 @@ module.exports =
         target = _.find(walls, (w) -> (w.hits / w.hitsMax) < percentage )
         break if target
         percentage = percentage + 0.0001
-      return creep.moveTo target if target and creep.repair(target) is ERR_NOT_IN_RANGE
+      if target
+        repairStatus = creep.repair(target)
+        return if repairStatus is OK
+        return creep.moveTo(target) if repairStatus is ERR_NOT_IN_RANGE
       roleBuilder.run creep
     else
       utils.getEnergy(creep)
-  ratio: {WORK: 1, MOVE: 1, CARRY: 1}
+  ratio: {WORK: 1, CARRY: 1, MOVE: 1}
