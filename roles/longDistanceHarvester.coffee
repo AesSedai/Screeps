@@ -14,11 +14,17 @@ module.exports =
         structure = creep.pos.findClosestByPath(FIND_MY_STRUCTURES, filter: (s) ->
           (s.structureType is STRUCTURE_SPAWN or s.structureType is STRUCTURE_EXTENSION or s.structureType is STRUCTURE_TOWER) and s.energy < s.energyCapacity
         )
-        return creep.moveTo structure if structure and creep.transfer(structure, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE
+        if structure
+          transferResult = creep.transfer(structure, RESOURCE_ENERGY)
+          return if transferResult is OK
+          return creep.moveTo structure if transferResult is ERR_NOT_IN_RANGE
         container = creep.pos.findClosestByPath(FIND_STRUCTURES, filter: (s) ->
           s.structureType == STRUCTURE_CONTAINER and _.sum(_.values(s.store)) < s.storeCapacity
         )
-        return creep.moveTo container if container and creep.transfer(container, RESOURCE_ENERGY) is ERR_NOT_IN_RANGE
+        if container
+          transferResult = creep.transfer(container, RESOURCE_ENERGY)
+          return if transferResult is OK
+          return creep.moveTo container if transferResult is ERR_NOT_IN_RANGE
       else
         creep.moveTo creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.home))
     else
