@@ -11,5 +11,8 @@ module.exports =
       creep.moveTo creep.room.controller if creep.upgradeController(creep.room.controller) is ERR_NOT_IN_RANGE
     else
       utils.getEnergy(creep)
-  build: [WORK, CARRY, MOVE, MOVE]
-  ratio: {WORK: 1, CARRY: 1, MOVE: 2}
+  options: {
+    ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+    scale:
+      max: 3
+  }

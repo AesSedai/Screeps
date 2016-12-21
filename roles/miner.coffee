@@ -28,6 +28,8 @@ module.exports =
     container = Game.getObjectById(creep.memory.container)
     return creep.moveTo container if not creep.pos.isEqualTo(container)
     creep.harvest(Game.getObjectById(creep.memory.source))
-  build: [WORK, MOVE]
-  ratio: {WORK: 5, MOVE: 1}
-  scale: 1
+  options: {
+    ratio: {WORK: 5, MOVE: 1}
+    scale:
+      max: 1
+  }

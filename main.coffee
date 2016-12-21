@@ -49,7 +49,7 @@ cleanup = ->
 
 spawnCreep = (spawn, energyToUse, currentEnergy, role) ->
   return if spawn.spawning
-  body = utils.generateBody(energyToUse, roles[role].ratio, roles[role]?.scale)
+  body = utils.generateBody(energyToUse, roles[role]?.options)
   cost = utils.calculateBodyCost(body)
   if currentEnergy >= cost
     console.log spawn.room.name, 'Spawning', role

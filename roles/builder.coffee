@@ -16,7 +16,7 @@ module.exports =
         return creep.moveTo(target) if buildStatus is ERR_NOT_IN_RANGE
       # check to see if any ramparts / walls are at minimum safe health
       ramparts = creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_RAMPART)
-      target = _.find(ramparts, (r) -> (r.hits / r.hitsMax) < 0.001 )
+      target = _.find(ramparts, (r) -> (r.hits / r.hitsMax) < 0.0001 )
       if target
         repairStatus = creep.repair(target)
         return if repairStatus is OK
@@ -31,5 +31,8 @@ module.exports =
       roleUpgrader.run creep
     else
       utils.getEnergy(creep)
-  build: [WORK, CARRY, MOVE]
-  ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+  options: {
+    ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+    scale:
+      max: 3
+  }

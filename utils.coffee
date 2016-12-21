@@ -33,10 +33,17 @@ dropOffResources = (creep) ->
 getBodyFromParts = (parts) ->
   _.flatten(_.map(parts, (val, key) -> _.fill(Array(val), key.toLowerCase())))
 
-generateBody = (energy, partsRatio, scale = undefined) ->
-  unitCost = calculateBodyCost(getBodyFromParts(partsRatio))
-  scale ?= _.floor(energy / unitCost)
-  getBodyFromParts(_.zipObject(_.keys(partsRatio), _.map(partsRatio, (val) -> val * scale)))
+generateBody = (energy, options = {}) ->
+  opts = {
+    ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+    scale: {
+      min: 1
+      max: 50
+  }}
+  _.assign(opts, options)
+  unitCost = calculateBodyCost(getBodyFromParts(opts.ratio))
+  scale = _.clamp(_.floor(energy / unitCost), opts.scale.min, opts.scale.max)
+  getBodyFromParts(_.zipObject(_.keys(opts.ratio), _.map(opts.ratio, (val) -> val * scale)))
 
 module.exports =
   calculateBodyCost: calculateBodyCost

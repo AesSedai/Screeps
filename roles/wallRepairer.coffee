@@ -13,7 +13,7 @@ module.exports =
       ramparts = creep.room.find(FIND_STRUCTURES, filter: structureType: STRUCTURE_RAMPART)
       target = undefined
       # check for ramparts to repair first
-      percentage = 0.001
+      percentage = 0.0001
       while percentage <= 1
         # find a rampart with less than percentage hits
         target = _.find(ramparts, (r) -> (r.hits / r.hitsMax) < percentage )
@@ -38,4 +38,8 @@ module.exports =
       roleBuilder.run creep
     else
       utils.getEnergy(creep)
-  ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+  options: {
+          ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+          scale:
+            max: 3
+  }

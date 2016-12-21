@@ -26,5 +26,8 @@ module.exports =
       roleUpgrader.run creep
     else
       utils.getEnergy(creep)
-  build: [WORK, CARRY, MOVE]
-  ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+  options: {
+    ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+    scale:
+      max: 3
+  }

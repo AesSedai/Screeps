@@ -26,4 +26,8 @@ module.exports =
         return utils.getEnergy(creep)
       else
         return creep.moveTo creep.pos.findClosestByRange(creep.room.findExitTo(creep.memory.target))
-  ratio: {WORK: 1, CARRY: 2, MOVE: 2}
+  options: {
+    ratio: {WORK: 1, CARRY: 1, MOVE: 1}
+    scale:
+      max: 4
+  }
