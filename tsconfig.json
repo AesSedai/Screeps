@@ -9,14 +9,14 @@
     "strictNullChecks": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/screeps-typescript-declarations",
+      "./src"
+    ]
   },
   "compileOnSave": false,
-  "files": [
-    "./node_modules/@types/lodash/index.d.ts",
-    "typings/index.d.ts",
-    "src/index.d.ts"
-  ],
   "includes": [
     "src/**/*.ts"
   ],

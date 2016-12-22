@@ -1,6 +1,5 @@
 import * as CreepManager from "./components/creeps/creepManager";
 import * as Config from "./config/config";
-import * as _ from "lodash";
 
 import { log } from "./components/support/log";
 
@@ -25,15 +24,6 @@ log.info("load");
  * @export
  */
 export function loop() {
-
-  let nums: {id: number, letter: string}[] = [
-    {"id": 1, "letter": "a"},
-    {"id": 2, "letter": "b"},
-    {"id": 2, "letter": "c"},
-  ];
-
-  log.info(_.sumBy(nums, (n: {id: number, letter: string}) => n.id));
-
   // Check memory for null or out of bounds custom objects
   if (!Memory.uuid || Memory.uuid > 100) {
     Memory.uuid = 0;

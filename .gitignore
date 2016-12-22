@@ -3,6 +3,9 @@
 /node_modules
 /typings
 
+# ignore js compiles of ts
+/src/**/*.js
+
 # Screeps config file
 /config.json
 
